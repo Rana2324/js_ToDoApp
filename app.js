@@ -104,11 +104,13 @@ function getData() {
 //Rendering data ui
 
 function renderData(tasks) {
-  tasks.foreEach((task) => {
+  // console.log(tasks);
+  tasks.forEach((task) => {
+    console.log(task);
     const item = document.createElement("div");
     item.className = "item";
     item.innerHTML = `
-  li>${task}</li>
+  <li>${task}</li>
   <button class="edit"><i class="fas fa-pen"></i></button>
   <button class="completed"><i class="fas fa-check"></i></button>
   <button class="delete"><i class="fas fa-trash-can"></i></button>`;
