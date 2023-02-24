@@ -37,7 +37,7 @@ taskList.addEventListener("click", (event) => {
   } else if (event.target.className == "completed") {
     completedItem(event);
   } else if (event.target.className == "edit") {
-    console.log(event.target);
+    editTaskName(event);
   }
 });
 
@@ -52,4 +52,66 @@ function deleteItem(event) {
 function completedItem(event) {
   const li = event.target.parentElement.firstElementChild;
   li.classList.toggle("complete_style");
+}
+
+//edit section
+
+function editTaskName(event) {
+  const li = event.target.parentElement.firstElementChild;
+  const previousText = li.innerHTML;
+  li.innerHTML = "";
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = previousText;
+
+  input.addEventListener("keypress", (e) => {
+    if (e.key == "Enter") {
+      const modifiedName = e.target.value;
+
+      li.innerHTML = "";
+      li.innerText = modifiedName;
+      event.target.style.display = "inline";
+    }
+  });
+
+  li.appendChild(input);
+  event.target.style.display = "none";
+}
+
+//onload section
+
+document.body.onload = (e) => {
+  const tasks = getData();
+  renderData(tasks);
+};
+
+//get data from localstorage
+
+function getData() {
+  let tasks;
+  const data = localStorage.getItem("tasks");
+
+  if (data) {
+    tasks = JSON.parse(data);
+  } else {
+    tasks = [];
+  }
+
+  return tasks;
+}
+
+//Rendering data ui
+
+function renderData(tasks) {
+  tasks.foreEach((task) => {
+    const item = document.createElement("div");
+    item.className = "item";
+    item.innerHTML = `
+  li>${task}</li>
+  <button class="edit"><i class="fas fa-pen"></i></button>
+  <button class="completed"><i class="fas fa-check"></i></button>
+  <button class="delete"><i class="fas fa-trash-can"></i></button>`;
+    taskList.appendChild(item);
+  });
 }
