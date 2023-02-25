@@ -30,14 +30,17 @@ function addNewInput(text) {
 
   taskList.appendChild(item);
   const tasks = getData();
+
   let uniqueTask = text;
   for (let taskName of tasks) {
-    if (taskName.trim() === text) {
+    if (taskName[0].trim() === text.trim()) {
       uniqueTask += " ";
     }
   }
 
-  tasks.push(uniqueTask);
+  const newTaskArr = [uniqueTask, "active"];
+
+  tasks.push(newTaskArr);
   setElement(tasks);
 }
 
@@ -61,7 +64,12 @@ function deleteItem(event) {
 
 function deleteTaskName(taskName) {
   const tasks = getData();
-  const index = tasks.indexOf(taskName);
+  let index;
+  for (let i = 0; i < tasks.length; i++) {
+    if (tasks[i][0] == taskName) {
+      index = i;
+    }
+  }
 
   tasks.splice(index, 1);
   setElement(tasks);
@@ -71,6 +79,22 @@ function deleteTaskName(taskName) {
 function completedItem(event) {
   const li = event.target.parentElement.firstElementChild;
   li.classList.toggle("complete_style");
+  const tasks = getData();
+  let index;
+  tasks.forEach((task, i) => {
+    if (task[0] == li.innerText) {
+      index = i;
+    }
+  });
+
+  const task = tasks[index];
+  if (task[1] == "active") {
+    task[1] = "completed";
+  } else {
+    task[1] == "active";
+  }
+  tasks.splice(index, 1, task);
+  setElement(tasks);
 }
 
 //edit section
@@ -93,8 +117,17 @@ function editTaskName(event) {
       event.target.style.display = "inline";
 
       const tasks = getData();
-      const index = tasks.indexOf(previousText);
-      tasks.splice(index, 1, modifiedName);
+      let index;
+      for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i][0].trim() == previousText) {
+          index = i;
+        }
+      }
+
+      let previousTask = tasks[index];
+      previousTask.splice(0, 1, modifiedName);
+
+      tasks.splice(index, 1, previousTask);
       setElement(tasks);
     }
   });
@@ -133,8 +166,14 @@ function renderData(tasks) {
     // console.log(task);
     const item = document.createElement("div");
     item.className = "item";
+
+    let status = "";
+    if (task[1] == "complete") {
+      status = "complete_style";
+    }
+
     item.innerHTML = `
-  <li>${task}</li>
+  <li class=${status}>${task[0]}</li>
   <button class="edit"><i class="fas fa-pen"></i></button>
   <button class="completed"><i class="fas fa-check"></i></button>
   <button class="delete"><i class="fas fa-trash-can"></i></button>`;
