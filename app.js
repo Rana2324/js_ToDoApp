@@ -91,6 +91,11 @@ function editTaskName(event) {
       li.innerHTML = "";
       li.innerText = modifiedName;
       event.target.style.display = "inline";
+
+      const tasks = getData();
+      const index = tasks.indexOf(previousText);
+      tasks.splice(index, 1, modifiedName);
+      setElement(tasks);
     }
   });
 
