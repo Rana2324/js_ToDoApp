@@ -29,6 +29,16 @@ function addNewInput(text) {
   `;
 
   taskList.appendChild(item);
+  const tasks = getData();
+  let uniqueTask = text;
+  for (let taskName of tasks) {
+    if (taskName.trim() === text) {
+      uniqueTask += " ";
+    }
+  }
+
+  tasks.push(uniqueTask);
+  setElement(tasks);
 }
 
 taskList.addEventListener("click", (event) => {
@@ -45,8 +55,17 @@ taskList.addEventListener("click", (event) => {
 
 function deleteItem(event) {
   event.target.parentElement.remove();
+  const taskName = event.target.parentElement.firstElementChild.innerText;
+  deleteTaskName(taskName);
 }
 
+function deleteTaskName(taskName) {
+  const tasks = getData();
+  const index = tasks.indexOf(taskName);
+
+  tasks.splice(index, 1);
+  setElement(tasks);
+}
 //checked section
 
 function completedItem(event) {
@@ -106,7 +125,7 @@ function getData() {
 function renderData(tasks) {
   // console.log(tasks);
   tasks.forEach((task) => {
-    console.log(task);
+    // console.log(task);
     const item = document.createElement("div");
     item.className = "item";
     item.innerHTML = `
@@ -116,4 +135,10 @@ function renderData(tasks) {
   <button class="delete"><i class="fas fa-trash-can"></i></button>`;
     taskList.appendChild(item);
   });
+}
+
+//set element in localstorage
+
+function setElement(tasks) {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
