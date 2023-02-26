@@ -91,7 +91,7 @@ function completedItem(event) {
   if (task[1] == "active") {
     task[1] = "completed";
   } else {
-    task[1] == "active";
+    task[1] = "active";
   }
   tasks.splice(index, 1, task);
   setElement(tasks);
@@ -168,7 +168,7 @@ function renderData(tasks) {
     item.className = "item";
 
     let status = "";
-    if (task[1] == "complete") {
+    if (task[1] == "completed") {
       status = "complete_style";
     }
 
